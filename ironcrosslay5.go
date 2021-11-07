@@ -11,9 +11,10 @@ const (
 	numrolls         = 1000
 	numgames         = 10000
 	lay5payment      = 0.67
-	place6or8value   = 25
 	place6or8payment = 1.17
-	fieldbetvalue    = 15
+	lay5Bet          = 150
+	placeBet         = 25
+	fieldBet         = 15
 	fieldpaysdouble  = true
 	fieldhastriple   = true
 )
@@ -191,24 +192,24 @@ func (g *gameState) sevenOut() {
 
 func (g *gameState) bet() {
 	if g.pointOn {
-		if g.fieldBetValue == 0 && g.playerBankroll >= 15 {
-			g.fieldBetValue = 15
-			g.playerBankroll = g.playerBankroll - 15
+		if g.fieldBetValue == 0 && g.playerBankroll >= fieldBet {
+			g.fieldBetValue = fieldBet
+			g.playerBankroll = g.playerBankroll - fieldBet
 		}
 
-		if g.lay5value == 0 && g.playerBankroll >= 150 {
-			g.lay5value = 150
-			g.playerBankroll = g.playerBankroll - 150
+		if g.lay5value == 0 && g.playerBankroll >= lay5Bet {
+			g.lay5value = lay5Bet
+			g.playerBankroll = g.playerBankroll - lay5Bet
 		}
 
-		if g.place6value == 0 && g.playerBankroll >= 25 {
-			g.place6value = 25
-			g.playerBankroll = g.playerBankroll - 25
+		if g.place6value == 0 && g.playerBankroll >= placeBet {
+			g.place6value = placeBet
+			g.playerBankroll = g.playerBankroll - placeBet
 		}
 
-		if g.place8value == 0 && g.playerBankroll >= 25 {
-			g.place8value = 25
-			g.playerBankroll = g.playerBankroll - 25
+		if g.place8value == 0 && g.playerBankroll >= placeBet {
+			g.place8value = placeBet
+			g.playerBankroll = g.playerBankroll - placeBet
 		}
 	}
 }
