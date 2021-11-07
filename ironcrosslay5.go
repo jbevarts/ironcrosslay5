@@ -15,7 +15,7 @@ const (
 	place6or8payment = 1.17
 	lay5Bet          = 150
 	placeBet         = 25
-	fieldBet         = 15
+	fieldBet         = 0
 	fieldhastriple   = true
 )
 
