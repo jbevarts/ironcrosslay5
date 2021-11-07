@@ -8,12 +8,16 @@ import (
 
 const (
 	// not accounting for commission yet
-	bankroll         = 1000
+	bankroll         = 10000
 	numrolls         = 1000
-	numgames         = 20000
+	numgames         = 10000
 	lay5payment      = 0.67
 	place6or8payment = 1.17
+<<<<<<< HEAD
 	lay5Bet          = 100
+=======
+	lay5Bet          = 150
+>>>>>>> parent of 4630502 (add ability to press once)
 	placeBet         = 25
 	fieldBet         = 0
 	fieldhastriple   = true
@@ -66,7 +70,6 @@ type gameState struct {
 	place6value    int
 	place8value    int
 	fieldBetValue  int
-	shouldPress    bool
 }
 
 func createGameState() *gameState {
@@ -77,7 +80,6 @@ func createGameState() *gameState {
 		rollsThrown:    0,
 		playerBankroll: bankroll,
 		lay5value:      0,
-		shouldPress:    true,
 	}
 
 	return newGame
@@ -127,6 +129,7 @@ func (g *gameState) rollTheDice() int64 {
 
 func (g *gameState) processRoll(roll int) {
 	profit := 0
+
 	if g.pointOn {
 		switch roll {
 		case 2:
@@ -177,6 +180,7 @@ func (g *gameState) payTheField(triple bool) int {
 }
 
 func (g *gameState) payThe6() int {
+<<<<<<< HEAD
 	payment := 0
 	if g.shouldPress && g.playerBankroll > g.place6value {
 		g.place6value = 2 * g.place6value
@@ -187,6 +191,11 @@ func (g *gameState) payThe6() int {
 		g.playerBankroll = g.playerBankroll + payment
 		g.place6value = 0
 	}
+=======
+	payment := int(place6or8payment*float64(g.place6value)) + g.place6value - g.fieldBetValue
+	g.playerBankroll = g.playerBankroll + payment
+	g.place6value = 0
+>>>>>>> parent of 4630502 (add ability to press once)
 	g.fieldBetValue = 0
 
 	return payment
@@ -201,6 +210,7 @@ func (g *gameState) clear5() int {
 }
 
 func (g *gameState) payThe8() int {
+<<<<<<< HEAD
 	payment := 0
 	if g.shouldPress && g.playerBankroll > g.place6value {
 		g.place8value = 2 * g.place8value
@@ -211,6 +221,11 @@ func (g *gameState) payThe8() int {
 		g.playerBankroll = g.playerBankroll + payment
 		g.place8value = 0
 	}
+=======
+	payment := int(place6or8payment*float64(g.place8value)) + g.place8value - g.fieldBetValue
+	g.playerBankroll = g.playerBankroll + payment
+	g.place8value = 0
+>>>>>>> parent of 4630502 (add ability to press once)
 	g.fieldBetValue = 0
 
 	return payment
