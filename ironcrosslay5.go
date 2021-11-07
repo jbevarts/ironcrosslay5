@@ -7,14 +7,15 @@ import (
 )
 
 const (
-	// not accounting for commission yet
-	bankroll         = 10000
-	numrolls         = 1000
+	bankroll         = 200
+	numrolls         = 40
 	numgames         = 10000
 	lay5payment      = 0.67
+	lay4payment      = 0.50
 	place6or8payment = 1.17
-	lay5Bet          = 150
-	placeBet         = 25
+	lay5Bet          = 0
+	lay4Bet          = 50
+	placeBet         = 15
 	fieldBet         = 0
 	fieldhastriple   = true
 )
@@ -63,6 +64,7 @@ type gameState struct {
 	rollsThrown    int
 	playerBankroll int
 	lay5value      int
+	lay4value      int
 	place6value    int
 	place8value    int
 	fieldBetValue  int
@@ -133,7 +135,8 @@ func (g *gameState) processRoll(roll int) {
 		case 3:
 			profit = g.payTheField(false)
 		case 4:
-			profit = g.payTheField(false)
+			//profit = g.payTheField(false)
+			profit = g.clear4()
 		case 5:
 			profit = g.clear5()
 		case 6:
@@ -184,6 +187,14 @@ func (g *gameState) payThe6() int {
 	return payment
 }
 
+func (g *gameState) clear4() int {
+	loss := g.lay4value - g.fieldBetValue
+	g.lay4value = 0
+	g.fieldBetValue = 0
+
+	return loss
+}
+
 func (g *gameState) clear5() int {
 	loss := g.lay5value - g.fieldBetValue
 	g.lay5value = 0
@@ -202,7 +213,7 @@ func (g *gameState) payThe8() int {
 }
 
 func (g *gameState) sevenOut() int {
-	profit := int(lay5payment*float64(g.lay5value)) + g.lay5value
+	profit := int(lay5payment*float64(g.lay5value)) + int(lay4payment*float64(g.lay4value)) + g.lay5value
 	g.playerBankroll = g.playerBankroll + profit
 	profit = profit - g.place8value
 	g.place8value = 0
@@ -211,6 +222,7 @@ func (g *gameState) sevenOut() int {
 	profit = profit - g.fieldBetValue
 	g.fieldBetValue = 0
 	g.lay5value = 0
+	g.lay4value = 0
 	g.pointOn = false
 	g.point = 0
 
@@ -227,6 +239,11 @@ func (g *gameState) bet() {
 		if g.lay5value == 0 && g.playerBankroll >= lay5Bet {
 			g.lay5value = lay5Bet
 			g.playerBankroll = g.playerBankroll - lay5Bet
+		}
+
+		if g.lay4value == 0 && g.playerBankroll >= lay4Bet {
+			g.lay4value = lay4Bet
+			g.playerBankroll = g.playerBankroll - lay4Bet
 		}
 
 		if g.place6value == 0 && g.playerBankroll >= placeBet {
