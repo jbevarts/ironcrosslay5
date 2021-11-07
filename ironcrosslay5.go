@@ -13,11 +13,7 @@ const (
 	numgames         = 10000
 	lay5payment      = 0.67
 	place6or8payment = 1.17
-<<<<<<< HEAD
-	lay5Bet          = 100
-=======
 	lay5Bet          = 150
->>>>>>> parent of 4630502 (add ability to press once)
 	placeBet         = 25
 	fieldBet         = 0
 	fieldhastriple   = true
@@ -180,22 +176,9 @@ func (g *gameState) payTheField(triple bool) int {
 }
 
 func (g *gameState) payThe6() int {
-<<<<<<< HEAD
-	payment := 0
-	if g.shouldPress && g.playerBankroll > g.place6value {
-		g.place6value = 2 * g.place6value
-		g.playerBankroll = g.playerBankroll - g.place6value
-		g.shouldPress = false
-	} else {
-		payment = int(place6or8payment*float64(g.place6value)) + g.place6value - g.fieldBetValue
-		g.playerBankroll = g.playerBankroll + payment
-		g.place6value = 0
-	}
-=======
 	payment := int(place6or8payment*float64(g.place6value)) + g.place6value - g.fieldBetValue
 	g.playerBankroll = g.playerBankroll + payment
 	g.place6value = 0
->>>>>>> parent of 4630502 (add ability to press once)
 	g.fieldBetValue = 0
 
 	return payment
@@ -210,22 +193,9 @@ func (g *gameState) clear5() int {
 }
 
 func (g *gameState) payThe8() int {
-<<<<<<< HEAD
-	payment := 0
-	if g.shouldPress && g.playerBankroll > g.place6value {
-		g.place8value = 2 * g.place8value
-		g.playerBankroll = g.playerBankroll - g.place8value
-		g.shouldPress = false
-	} else {
-		payment := int(place6or8payment*float64(g.place8value)) + g.place8value - g.fieldBetValue
-		g.playerBankroll = g.playerBankroll + payment
-		g.place8value = 0
-	}
-=======
 	payment := int(place6or8payment*float64(g.place8value)) + g.place8value - g.fieldBetValue
 	g.playerBankroll = g.playerBankroll + payment
 	g.place8value = 0
->>>>>>> parent of 4630502 (add ability to press once)
 	g.fieldBetValue = 0
 
 	return payment
@@ -243,7 +213,6 @@ func (g *gameState) sevenOut() int {
 	g.lay5value = 0
 	g.pointOn = false
 	g.point = 0
-	g.shouldPress = true
 
 	return profit
 }
