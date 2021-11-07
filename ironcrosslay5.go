@@ -13,7 +13,7 @@ const (
 	numgames         = 20000
 	lay5payment      = 0.67
 	place6or8payment = 1.17
-	lay5Bet          = 75
+	lay5Bet          = 100
 	placeBet         = 25
 	fieldBet         = 0
 	fieldhastriple   = true
@@ -186,8 +186,8 @@ func (g *gameState) payThe6() int {
 		payment = int(place6or8payment*float64(g.place6value)) + g.place6value - g.fieldBetValue
 		g.playerBankroll = g.playerBankroll + payment
 		g.place6value = 0
-		g.fieldBetValue = 0
 	}
+	g.fieldBetValue = 0
 
 	return payment
 }
@@ -210,8 +210,8 @@ func (g *gameState) payThe8() int {
 		payment := int(place6or8payment*float64(g.place8value)) + g.place8value - g.fieldBetValue
 		g.playerBankroll = g.playerBankroll + payment
 		g.place8value = 0
-		g.fieldBetValue = 0
 	}
+	g.fieldBetValue = 0
 
 	return payment
 }
@@ -228,6 +228,7 @@ func (g *gameState) sevenOut() int {
 	g.lay5value = 0
 	g.pointOn = false
 	g.point = 0
+	g.shouldPress = true
 
 	return profit
 }
