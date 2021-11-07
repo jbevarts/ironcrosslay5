@@ -15,8 +15,7 @@ const (
 	place6or8payment = 1.17
 	lay5Bet          = 150
 	placeBet         = 25
-	fieldBet         = 50
-	fieldpaysdouble  = true
+	fieldBet         = 15
 	fieldhastriple   = true
 )
 
@@ -100,7 +99,7 @@ func (g *gameState) performIronCrossLay5() (int, int, int) {
 			localMax = g.playerBankroll
 		}
 	}
-	//fmt.Printf("Bankroll: %v, rollsThrown: %v \n", g.playerBankroll, g.rollsThrown)
+	//fmt.Printf("Bankroll: %v, rollsThrown: %v, localMax: %v\n", g.playerBankroll, g.rollsThrown, localMax)
 	return g.playerBankroll, g.rollsThrown, localMax
 }
 
@@ -125,30 +124,32 @@ func (g *gameState) rollTheDice() int64 {
 }
 
 func (g *gameState) processRoll(roll int) {
+	profit := 0
+
 	if g.pointOn {
 		switch roll {
 		case 2:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 3:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 4:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 5:
-			g.clear5()
+			profit = g.clear5()
 		case 6:
-			g.payThe6()
+			profit = g.payThe6()
 		case 7:
-			g.sevenOut()
+			profit = g.sevenOut()
 		case 8:
-			g.payThe8()
+			profit = g.payThe8()
 		case 9:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 10:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 11:
-			g.payTheField(false)
+			profit = g.payTheField(false)
 		case 12:
-			g.payTheField(true)
+			profit = g.payTheField(true)
 		}
 	} else {
 		if roll == 4 || roll == 5 || roll == 6 || roll == 8 || roll == 9 || roll == 10 {
@@ -156,39 +157,64 @@ func (g *gameState) processRoll(roll int) {
 			g.point = roll
 		}
 	}
-}
-
-func (g *gameState) payTheField(triple bool) {
-	if triple {
-		g.playerBankroll = g.playerBankroll + 3*g.fieldBetValue
-	} else {
-		g.playerBankroll = g.playerBankroll + 2*g.fieldBetValue
+	if profit > 0 {
+		//fmt.Printf("roll profit: %v\n", profit)
 	}
+}
+
+func (g *gameState) payTheField(triple bool) int {
+	var payment int
+	if triple {
+		payment = 3 * g.fieldBetValue
+	} else {
+		payment = 2 * g.fieldBetValue
+	}
+
+	g.playerBankroll = g.playerBankroll + payment
 	g.fieldBetValue = 0
+	return payment
 }
 
-func (g *gameState) payThe6() {
-	g.playerBankroll = g.playerBankroll + int(place6or8payment*float64(g.place6value)) + g.place6value
+func (g *gameState) payThe6() int {
+	payment := int(place6or8payment*float64(g.place6value)) + g.place6value - g.fieldBetValue
+	g.playerBankroll = g.playerBankroll + payment
 	g.place6value = 0
+	g.fieldBetValue = 0
+
+	return payment
 }
 
-func (g *gameState) clear5() {
+func (g *gameState) clear5() int {
+	loss := g.lay5value - g.fieldBetValue
 	g.lay5value = 0
+	g.fieldBetValue = 0
+
+	return loss
 }
 
-func (g *gameState) payThe8() {
-	g.playerBankroll = g.playerBankroll + int(place6or8payment*float64(g.place8value)) + g.place8value
+func (g *gameState) payThe8() int {
+	payment := int(place6or8payment*float64(g.place8value)) + g.place8value - g.fieldBetValue
+	g.playerBankroll = g.playerBankroll + payment
 	g.place8value = 0
+	g.fieldBetValue = 0
+
+	return payment
 }
 
-func (g *gameState) sevenOut() {
-	g.playerBankroll = g.playerBankroll + int(lay5payment*float64(g.lay5value)) + g.lay5value
+func (g *gameState) sevenOut() int {
+	profit := int(lay5payment*float64(g.lay5value)) + g.lay5value
+	g.playerBankroll = g.playerBankroll + profit
+	profit = profit - g.place8value
 	g.place8value = 0
+	profit = profit - g.place6value
 	g.place6value = 0
+	profit = profit - g.fieldBetValue
 	g.fieldBetValue = 0
 	g.lay5value = 0
 	g.pointOn = false
 	g.point = 0
+
+	return profit
 }
 
 func (g *gameState) bet() {
