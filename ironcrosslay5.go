@@ -7,15 +7,15 @@ import (
 )
 
 const (
-	bankroll         = 200
+	bankroll         = 400
 	numrolls         = 40
-	numgames         = 10000
+	numgames         = 100
 	lay5payment      = 0.67
 	lay4payment      = 0.50
 	place6or8payment = 1.17
-	lay5Bet          = 0
-	lay4Bet          = 50
-	placeBet         = 15
+	lay5Bet          = 120
+	lay4Bet          = 0
+	placeBet         = 25
 	fieldBet         = 0
 	fieldhastriple   = true
 )
