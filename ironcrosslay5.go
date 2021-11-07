@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	// not accounting for commission yet
 	bankroll         = 10000
 	numrolls         = 1000
 	numgames         = 10000
@@ -14,7 +15,7 @@ const (
 	place6or8payment = 1.17
 	lay5Bet          = 150
 	placeBet         = 25
-	fieldBet         = 15
+	fieldBet         = 50
 	fieldpaysdouble  = true
 	fieldhastriple   = true
 )
